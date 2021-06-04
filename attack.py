@@ -104,19 +104,19 @@ class Attacker(object):
             x_adv = torch.clamp(x_adv,*self.clamp)
 
 
-        for step in self.config['attack_steps']:
+        for step in range(self.config['attack_steps']):
             x.requires_grad=True
             logit = self.model(x)
             if target is None:
                 cost = -F.cross_entropy(logit, y)
             else:
                 cost = F.cross_entropy(logit, target)
-            grad = torch.autograd.grad(cost, x_adv, retain_graph=False, create_graph=False)
+            grad = torch.autograd.grad(cost, x, retain_graph=False, create_graph=False)[0]
             grad_norm = torch.norm(grad, p=1)
             grad /= grad_norm
             grad += momentum*decay
             momentum = grad
-            x_adv = x + alpha*grad.sign()
+            x_adv = x - alpha*grad.sign()
             a = torch.clamp(x - self.config['eps'], min=0)
             b = (x_adv >= a).float()*x_adv + (a > x_adv).float()*a
             c = (b > x + self.config['eps']).float() * (x + self.config['eps']) + (

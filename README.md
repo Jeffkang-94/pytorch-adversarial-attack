@@ -1,4 +1,4 @@
-# Simple implementation of gradient-based adversarial attack
+# Pytorch implementation of gradient-based adversarial attack
 
 This repository covers pytorch implementation of FGSM, MI-FGSM, and PGD attack.
 Attacks are implemented in `attack.py` file.

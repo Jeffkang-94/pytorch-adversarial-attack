@@ -41,7 +41,7 @@ def adv_test():
         _, pred = logit.max(1)
         correct += pred.eq(targets).sum().item()
 
-        adv_inputs = attack.fgsm(inputs, targets)
+        adv_inputs = attack.mi_fgsm(inputs, targets)
         logit = model(adv_inputs)
         _, pred = logit.max(1)
         adv_correct += pred.eq(targets).sum().item()
