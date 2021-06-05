@@ -1,8 +1,9 @@
-## Code for PGD attacker
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
+from abc import ABC, abstractmethod
 
-class Attacker(object):
+class Attacker(ABC):
     def __init__(self, model, config):
         """
         ## initialization ##
@@ -13,29 +14,34 @@ class Attacker(object):
         self.model = model
         self.clamp = (0,1)
     
-    def fgsm(self, x, y, target=None):
-        """
-        :param x: Inputs to perturb
-        :param y: Ground-truth label
-        :param target : Target label 
-        :return adversarial image
-        """
-        
+    def _random_init(self, x):
+        x = x + (torch.rand(x.size(), dtype=x.dtype, device=x.device) - 0.5) * 2 * self.config['eps']
+        x = torch.clamp(x,*self.clamp)
+        return x
+
+    def __call__(self, x,y):
+        x_adv = self.forward(x,y)
+        return x_adv
+
+class FGSM(Attacker):
+    def __init__(self, model, config, target=None):
+        super(FGSM, self).__init__(model, config)
+        self.target = target
+
+    def forward(self, x, y):
         x_adv = x.detach().clone()
 
         if self.config['random_init']:
-            # Flag to use random initialization
-            x_adv = x_adv + (torch.rand(x.size(), dtype=x.dtype, device=x.device) - 0.5) * 2 * self.config['eps']
-            x_adv = torch.clamp(x_adv,0,1)
+            x_adv = self._random_init(x_adv)
 
         x_adv.requires_grad=True
         self.model.zero_grad()
 
         logit = self.model(x_adv)
-        if target is None:
+        if self.target is None:
             cost = -F.cross_entropy(logit, y)
         else:
-            cost = F.cross_entropy(logit, target)
+            cost = F.cross_entropy(logit, self.target)
         
         if x_adv.grad is not None:
             x_adv.grad.data.fill_(0)
@@ -47,7 +53,12 @@ class Attacker(object):
 
         return x_adv
 
-    def pgd(self, x, y, target=None):
+class PGD(Attacker):
+    def __init__(self, model, config, target=None):
+        super(PGD, self).__init__(model, config)
+        self.target = target
+
+    def forward(self, x, y):
         """
         :param x: Inputs to perturb
         :param y: Ground-truth label
@@ -56,22 +67,19 @@ class Attacker(object):
         """
         x_adv = x.detach().clone()
         if self.config['random_init'] :
-            x_adv = x_adv + (torch.rand(x.size(), dtype=x.dtype, device=x.device) - 0.5) * 2 * self.config['eps']
-            x_adv = torch.clamp(x_adv,*self.clamp)
+            x_adv = self._random_init(x_adv)
 
         for step in range(self.config['attack_steps']):
             x_adv.requires_grad = True
             self.model.zero_grad()
             logits = self.model(x_adv) #f(T((x))
-            if target is None:
+            if self.target is None:
                 # Untargeted attacks - gradient ascent
                 loss = F.cross_entropy(logits, y,  reduction="sum")
                 loss.backward()
                 grad = x_adv.grad.detach()
                 grad = grad.sign()
                 x_adv = x_adv + self.config['attack_lr'] * grad
-
-
             else:
                 # Targeted attacks - gradient descent
                 assert self.target.size() == y.size()
@@ -87,8 +95,13 @@ class Attacker(object):
             x_adv = torch.clamp(x_adv, *self.clamp)
 
         return x_adv
-    
-    def mi_fgsm(self, x,y, target=None):
+
+class MIFGSM(Attacker):
+    def __init__(self, model, config, target=None):
+        super(MIFGSM, self).__init__(model, config)
+        self.target = target
+
+    def forward(self, x,y):
         """
         :param x: Inputs to perturb
         :param y: Ground-truth label
@@ -107,7 +120,7 @@ class Attacker(object):
         for step in range(self.config['attack_steps']):
             x.requires_grad=True
             logit = self.model(x)
-            if target is None:
+            if self.target is None:
                 cost = -F.cross_entropy(logit, y)
             else:
                 cost = F.cross_entropy(logit, target)
@@ -126,4 +139,3 @@ class Attacker(object):
         x_adv = torch.clamp(x, *self.clamp)
         return x_adv
 
-    
