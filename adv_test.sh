@@ -3,8 +3,9 @@ CUDA_VISIBLE_DEVICES=1 python main.py \
     --name 'ResNet_clean.pth' \
     --dataset 'cifar10' \
     --datapath 'data' \
-    --attack 'FGSM'\
+    --attack 'PGD'\
     --batch_size 64 \
-    --attack_steps 40 \
+    --attack_steps 7 \
     --attack_lr 2 \
+    --viz_result \
     --random_init

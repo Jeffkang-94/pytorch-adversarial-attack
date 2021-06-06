@@ -14,5 +14,6 @@ def parse_args():
     parser.add_argument('--attack_steps', type=int, default='7', help='The number of attack steps')
     parser.add_argument('--attack_lr', type=float, default='2', help='The number of attack learning rate')
     parser.add_argument('--eps', type=float, default=8, help='The magnitude of the adversarial attacks')
+    parser.add_argument('--viz_result', action='store_true', help='The flag of generating visualization result')
     parser.add_argument('--random_init', action='store_true', help='The flag of random start')
     return parser.parse_args()

@@ -1,8 +1,10 @@
 import torch
-import os, argparse
-
 import torchvision
 import torchvision.transforms as transforms
+import matplotlib.pyplot as plt
+import numpy as np
+import os
+
 from tqdm import tqdm
 from cifar_model import *
 from utils import Normalize_net
@@ -29,7 +31,7 @@ elif args.model =='wideres':
     model = WRN(depth=34, width=10, num_classes=10).to(device)
     pass
 model.load_state_dict(checkpoint['model'])
-model = Normalize_net(model)
+model = Normalize_net(model) # apply the normalization before feeding the inputs into the classifier.
 model.eval()
 
 config = {
@@ -50,6 +52,28 @@ elif args.attack =='MIFGSM':
 elif args.attack =='PGD':
     attack = PGD(model, config)
 
+def visualize_sample(batch_idx, image, adv_image):
+    fig, axes = plt.subplots(2,5, figsize=(12,6))
+    image = np.transpose(image.cpu().detach().numpy(), (0,2,3,1))
+    adv_image = np.transpose(adv_image.cpu().detach().numpy(), (0,2,3,1))
+    for k in range(5):
+        axes[0, k].axis("off"), axes[1, k].axis("off")
+
+        x_grid = torchvision.utils.make_grid(torch.from_numpy(image[k,:,:,:]), nrow=1, padding=0, normalize=True, pad_value=0)
+        x_npgrid = x_grid.cpu().detach().numpy()
+        axes[0, k].imshow(x_npgrid, interpolation='nearest')
+        axes[0, k].set_title("Clean images")
+
+        x_adv_grid = torchvision.utils.make_grid(torch.from_numpy(adv_image[k,:,:,:]), nrow=1, padding=0, normalize=True, pad_value=0)
+        x_adv_npgrid = x_adv_grid.cpu().detach().numpy()
+        axes[1, k].imshow(x_adv_npgrid, interpolation='nearest')
+        axes[1, k].set_title("Adv images")
+    plt.axis("off")
+    if not os.path.isdir("results"):
+        os.makedirs("results")
+    plt.savefig("results/sample_{}.jpg".format(batch_idx))
+    plt.close(fig)
+
 def adv_test():
     adv_correct, correct = 0, 0 
     total = 0 
@@ -62,6 +86,8 @@ def adv_test():
         correct += pred.eq(targets).sum().item()
 
         adv_inputs = attack(inputs, targets)
+        if args.viz_result and batch_idx%10==0:
+            visualize_sample(batch_idx, inputs, adv_inputs)
         logit = model(adv_inputs)
         _, pred = logit.max(1)
         adv_correct += pred.eq(targets).sum().item()
