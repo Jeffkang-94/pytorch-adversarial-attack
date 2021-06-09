@@ -1,7 +1,7 @@
 # Pytorch implementation of gradient-based adversarial attack
 
 This repository covers pytorch implementation of FGSM, MI-FGSM, and PGD attack.
-Attacks are implemented in `attack.py` file.
+Attacks are implemented in `adv_attack.py` file.
 To explore adversarial attack, we deal with [Madry](https://arxiv.org/pdf/1706.06083.pdf) model which had been trained with PGD adversarial examples.
 
 ## Preliminary
@@ -11,9 +11,9 @@ An adversarial attack aims to find noise distribution to cross the decision boun
 In order to make sure that crafted adversarial images hold imperceptibility, the magnitude of perturbation will not be significant at human-level intuition.
 However, those are capable of crossing the boundary, leading to misclassification.
 <p align="center">
-    <img src="https://github.com/Jeffkang-94/pytorch-adversarial-attack/blob/develop/asset/clean_result.jpg" alt width="300" height="300">
-    <img src="https://github.com/Jeffkang-94/pytorch-adversarial-attack/blob/develop/asset/diff.jpg" width="300" height="300">
-    <img src="https://github.com/Jeffkang-94/pytorch-adversarial-attack/blob/develop/asset/adv_result.jpg" width="300" height="300">
+    <img src="https://github.com/Jeffkang-94/pytorch-adversarial-attack/blob/develop/asset/clean_result.jpg" alt width="250" height="250">
+    <img src="https://github.com/Jeffkang-94/pytorch-adversarial-attack/blob/develop/asset/diff.jpg" width="250" height="250">
+    <img src="https://github.com/Jeffkang-94/pytorch-adversarial-attack/blob/develop/asset/adv_result.jpg" width="250" height="250">
     <p align="center"> Original image / Difference / Adversarial image </p>
 </p>
 
@@ -58,7 +58,7 @@ CUDA_VISIBLE_DEVICES=1 python main.py \
   - `random_init` is a flag whether apply random initialization before launching an adversarial attack.
 
 
-## Usage
+## :rocket: Usage
 
 ```python
 from adv_attack import PGD
@@ -77,10 +77,11 @@ You can test out the adversarial attack using following command lines.
 
 > mkdir data  
 > ln -s <datapath> data  
-> bash adv_test.sh  
+> bash target_train.sh # training a victim model based on a basic image classification
+> bash adv_test.sh    # launching an adversarial attack
 
 
-## Pre-trained model
+## 🚴 Pre-trained model
 
 We provide the pre-trained ResNet model which had been trained with CIFAR-10 dataset.
 Note that `Madry` model had been trained with PGD-7 adversarial examples following introduced settings.
@@ -88,7 +89,7 @@ Note that `Madry` model had been trained with PGD-7 adversarial examples followi
 **ResNet** : [link](https://drive.google.com/file/d/1zAiPdXLPYkikxVnjXR8zcgEGer8HR3Ca/view?usp=sharing)  
 **Madry**  : [link](https://drive.google.com/file/d/1iAwkv18spCYaVEOi7IGDDHpgY9EB-MUi/view?usp=sharing)  
 
-## Experiment
+## 📔 Experiment
 
 |**Model** | **Clean** | **FGSM** | **MI-FGSM-20** | **PGD-7/40** |
 :---: |:---: |:---: |:---: | :---: |
@@ -97,7 +98,7 @@ Madry-Simple  | 78.10 | 49.71 | 46.97 | 45.01/41.06
 Wide-ResNetx10 |      |       |       |
 Madry-Wide     |      |       |       | 
 
-## Examples
+## :ghost: Examples
 We visualize each sample of adversary.
 
 ### FGSM adversary
