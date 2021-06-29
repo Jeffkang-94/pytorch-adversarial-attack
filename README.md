@@ -39,18 +39,19 @@ config = {
 ```
 
 ```bash
-CUDA_VISIBLE_DEVICES=1 python main.py \
+CUDA_VISIBLE_DEVICES=${GPU_ID} python main.py \
     --model 'res' \
-    --name ${pretrained_file} \ # ResNet_clean.pth, ResNet_Madry_PGD7.pth
+    --name ${pretrained_file} \ # clean.pth, adv.pth supported
     --dataset 'cifar10' \
     --datapath 'data' \
     --attack ${attack_type}\ # FGSM/PGD/MI-FGSM supported
-    --batch_size 64 \
-    --attack_steps 40 \
+    --batch_size ${batch_size} \
+    --attack_steps ${number_of_steps} \ # 7, 40, 100 etc.
     --attack_lr 2 \
     --viz_result \
     --random_init
 ```
+  - `name` is a name of checkpoint. You can specify your own checkpoint or follow the default setting(e.g., clean.pth, adv.pth)
   - `attack` is a attack type. *FGSM/PGD/MI-FGSM* are supported.
   - `attack_steps` is a number of attack steps. It is used for iterative attacks (e.g., MI-FGSM, PGD)
   - `attack_lr` is a learning rate of attack. 
@@ -85,18 +86,29 @@ You can test out the adversarial attack using following command lines.
 
 We provide the pre-trained ResNet model which had been trained with CIFAR-10 dataset.
 Note that `Madry` model had been trained with PGD-7 adversarial examples following introduced settings.
+For using a pre-trained model, you can use `download.sh` file. 
+It will automatically download the whole files and organize them to the designated path.
+
+```
+bash download.sh
+```
+
+Or you can directly access the link as below.
 
 **ResNet** : [link](https://drive.google.com/file/d/1zAiPdXLPYkikxVnjXR8zcgEGer8HR3Ca/view?usp=sharing)  
 **Madry**  : [link](https://drive.google.com/file/d/1iAwkv18spCYaVEOi7IGDDHpgY9EB-MUi/view?usp=sharing)  
+
+**Wide-ResNet** : [link](https://drive.google.com/file/d/1uEQdXDIK4XPnm7ZkzLFtTrXb0WfAgi54/view?usp=sharing)
+**Wide-Madry**  : [link](https://drive.google.com/file/d/1xdocjfDQ88LzLjYfkIJVSL9ImzrzUXZB/view?usp=sharing)
 
 ## 📔 Experiment
 
 |**Model** | **Clean** | **FGSM** | **MI-FGSM-20** | **PGD-7/40** |
 :---: |:---: |:---: |:---: | :---: |
 ResNet | 92.24 | 25.7 | 1.05  | 0.65/0.00
-Madry-Simple  | 78.10 | 49.71 | 46.97 | 45.01/41.06
-Wide-ResNetx10 |      |       |       |
-Madry-Wide     |      |       |       | 
+Madry-Simple  | 78.10 | 50.02 | 46.97 | 45.01/41.06
+Wide-ResNetx10 | 94.70   | 31.15 | 0.43  | 0.14/0.00
+Madry-Wide     | 86.71   | 52.27 | 47.27| 47.74/43.39
 
 ## :ghost: Examples
 We visualize each sample of adversary.

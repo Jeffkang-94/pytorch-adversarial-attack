@@ -1,11 +1,11 @@
-CUDA_VISIBLE_DEVICES=1 python main.py \
-    --model 'res' \
-    --name 'ResNet_clean.pth' \
+CUDA_VISIBLE_DEVICES=0 python main.py \
+    --model 'wideres' \
+    --name 'adv.pth' \
     --dataset 'cifar10' \
     --datapath 'data' \
-    --attack 'PGD'\
+    --attack 'FGSM'\
     --batch_size 64 \
-    --attack_steps 7 \
+    --attack_steps 20 \
     --attack_lr 2 \
     --viz_result \
     --random_init

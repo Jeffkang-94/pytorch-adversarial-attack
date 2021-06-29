@@ -7,7 +7,7 @@ def parse_args():
     parser.add_argument('--dataset', type=str, required=True, help='cifar10')
     parser.add_argument('--datapath', type=str, required=True, help='Denote the dataset path')
     parser.add_argument('--batch_size', type=int, default=64, help='The size of batch')
-    parser.add_argument('--checkpoint_dir', type=str, default='./cifar_model/state_dict/')
+    parser.add_argument('--checkpoint_dir', type=str, default='./checkpoint/')
     parser.add_argument('--name', type=str, default='ResNet_clean.pth')
 
     parser.add_argument('--attack', type=str, default='FGSM', help='The type of adversarial attacks [FGSM/MI-FGSM/PGD]')

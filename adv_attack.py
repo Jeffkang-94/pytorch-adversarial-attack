@@ -38,7 +38,11 @@ class FGSM(Attacker):
         self.model.zero_grad()
 
         logit = self.model(x_adv)
+        #y = torch.LongTensor(torch.randint(10, (64,1)).squeeze(0)).cuda()
+        #y = [torch.randint(10,(1,1)).squeeze(0) for i in range(64)]
+        #y = torch.LongTensor(y).cuda()
         if self.target is None:
+            #
             cost = -F.cross_entropy(logit, y)
         else:
             cost = F.cross_entropy(logit, self.target)

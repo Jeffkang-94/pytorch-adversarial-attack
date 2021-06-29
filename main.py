@@ -25,11 +25,10 @@ testloader = torch.utils.data.DataLoader(testset, batch_size=args.batch_size, sh
 
 if args.model == 'res':
     model = WRN(depth=34, width=1, num_classes=10).to(device)
-    checkpoint = torch.load(os.path.join(args.checkpoint_dir, args.name))
+    checkpoint = torch.load(os.path.join(args.checkpoint_dir, 'ResNet', args.name))
 elif args.model =='wideres':
-    # not supported yet
     model = WRN(depth=34, width=10, num_classes=10).to(device)
-    pass
+    checkpoint = torch.load(os.path.join(args.checkpoint_dir, 'WideResNet', args.name))
 model.load_state_dict(checkpoint['model'])
 model = Normalize_net(model) # apply the normalization before feeding the inputs into the classifier.
 model.eval()
