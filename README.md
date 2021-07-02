@@ -23,7 +23,7 @@ However, those are capable of crossing the boundary, leading to misclassificatio
 python 3.6
 pytorch >= 1.4.0
 tqdm
-``
+```
 
 ## :rocket: Usage
 
@@ -41,7 +41,7 @@ attack = PGD(model, attack_config)
 adversarial_image = attack(image, label)
 ```
 
-## :hammer Adversarial Training
+## :hammer: Adversarial Training
 
 You can test out the adversarial training using following command lines.  
 You have to specify the configuration path before launching the files.
@@ -57,7 +57,8 @@ Under `config` file, `train.json` and `eval.json` files include the configuratio
 You can set the different options depending on your own environment.
 This is the example of `train.json`. 
 
-```json
+
+```
 {
     "mode": "train",            // we are under train mode             
     "data_root": "./data",      // You can specify the own dataset root
