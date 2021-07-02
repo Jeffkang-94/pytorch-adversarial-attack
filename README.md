@@ -45,6 +45,7 @@ adversarial_image = attack(image, label)
 
 You can test out the adversarial training using following command lines.  
 You have to specify the configuration path before launching the files.
+
 ```
 > mkdir data  
 > ln -s <datapath> data  
@@ -56,7 +57,6 @@ You have to specify the configuration path before launching the files.
 Under `config` file, `train.json` and `eval.json` files include the configurations to launch the training or evaluation.  
 You can set the different options depending on your own environment.
 This is the example of `train.json`. 
-
 
 ```
 {
