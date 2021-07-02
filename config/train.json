@@ -1,0 +1,25 @@
+{
+    "mode": "train",
+    "data_root": "./data",
+    "model_name" : "resnet",
+    "model_depth": 32,
+    "model_width": 1,
+    "num_class":10,
+    "phase": "clean",
+  
+    "lr": 0.1,
+    "batch_size": 256,
+    "weight_decay": 0.0005,
+    "epochs": 200,
+    "save_interval" : 5,
+    "restore": false,
+    "save_path": "results",
+    "spbn": false,
+    "resume": false,
+    
+    "attack": "PGD", 
+    "attack_steps": 7,
+    "attack_eps": 8.0,
+    "attack_lr": 2.0,
+    "random_init": true,
+  }

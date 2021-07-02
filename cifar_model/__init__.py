@@ -14,3 +14,4 @@ from .mobilenet import *
 from .mobilenetv2 import *
 from .efficientnet import *
 from .wideresnet import *
+from .split_batchnorm import convert_splitbn_model, print_mean_std

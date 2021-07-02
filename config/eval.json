@@ -1,0 +1,19 @@
+{
+    "mode": "eval",
+    "data_root": "./data",
+    "model_name" : "resnet",
+    "model_depth": 32,
+    "model_width": 1,
+    "num_class":10,
+  
+    "batch_size": 128,
+    "save_path": "results",
+    "restore": false,
+    "spbn": false,
+  
+    "attack": "PGD",
+    "attack_steps": 7,
+    "attack_eps": 8.0,
+    "attack_lr": 2.0,
+    "random_init": true,
+  }

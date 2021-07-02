@@ -1,6 +1,6 @@
 # Pytorch implementation of gradient-based adversarial attack
 
-This repository covers pytorch implementation of FGSM, MI-FGSM, and PGD attack.
+This repository covers pytorch implementation of `FGSM`, `MI-FGSM`, and `PGD` attack.
 Attacks are implemented in `adv_attack.py` file.
 To explore adversarial attack, we deal with [Madry](https://arxiv.org/pdf/1706.06083.pdf) model which had been trained with PGD adversarial examples.
 
@@ -23,71 +23,77 @@ However, those are capable of crossing the boundary, leading to misclassificatio
 python 3.6
 pytorch >= 1.4.0
 tqdm
-```
-
-## Configuration
-`adv_test.sh` file consists of several options to launch the adversarial attack with different configuration.
-You can specify the attack configuration as below.
-
-```python
-config = {
-    'eps' : args.eps/255.0, 
-    'attack_steps': args.attack_steps,
-    'attack_lr': args.attack_lr / 255.0, 
-    'random_init': args.random_init, 
-}
-```
-
-```bash
-CUDA_VISIBLE_DEVICES=${GPU_ID} python main.py \
-    --model 'res' \
-    --name ${pretrained_file} \ # clean.pth, adv.pth supported
-    --dataset 'cifar10' \
-    --datapath 'data' \
-    --attack ${attack_type}\ # FGSM/PGD/MI-FGSM supported
-    --batch_size ${batch_size} \
-    --attack_steps ${number_of_steps} \ # 7, 40, 100 etc.
-    --attack_lr 2 \
-    --viz_result \
-    --random_init
-```
-  - `name` is a name of checkpoint. You can specify your own checkpoint or follow the default setting(e.g., clean.pth, adv.pth)
-  - `attack` is a attack type. *FGSM/PGD/MI-FGSM* are supported.
-  - `attack_steps` is a number of attack steps. It is used for iterative attacks (e.g., MI-FGSM, PGD)
-  - `attack_lr` is a learning rate of attack. 
-  - `viz_result` is a flag whether generate visualization samples at every 10 batch under `result` directory.
-  - `random_init` is a flag whether apply random initialization before launching an adversarial attack.
-
+``
 
 ## :rocket: Usage
 
 ```python
-from adv_attack import PGD
+from attack import PGD
 
-config = {
+attack_config = {
     'eps' : 8.0/255.0, 
     'attack_steps': 7,
     'attack_lr': 2.0 / 255.0, 
     'random_init': True, 
 }
 
-attack = PGD(model, config)
+attack = PGD(model, attack_config)
 adversarial_image = attack(image, label)
 ```
-You can test out the adversarial attack using following command lines.
 
+## :hammer Adversarial Training
+
+You can test out the adversarial training using following command lines.  
+You have to specify the configuration path before launching the files.
+```
 > mkdir data  
 > ln -s <datapath> data  
-> bash target_train.sh # training a victim model based on a basic image classification
-> bash adv_test.sh    # launching an adversarial attack
+> python main.py --cfg_path config/train.json # training a victim model
+> python main.py --cfg_path config/eval.json  # launching an adversarial attack to evaluate the pre-trained model
+```
+
+### Configuration
+Under `config` file, `train.json` and `eval.json` files include the configurations to launch the training or evaluation.  
+You can set the different options depending on your own environment.
+This is the example of `train.json`. 
+
+```json
+{
+    "mode": "train",            // we are under train mode             
+    "data_root": "./data",      // You can specify the own dataset root
+    "model_name" : "resnet",    // name of the model
+    "model_depth": 32,          // model depth
+    "model_width": 1,           // model width
+    "num_class":10,             // number of class, e.g., cifar-10 : 10
+    "phase": "adv",             // [clean/adv] supported
+  
+/* Training Configuration */
+    "lr": 0.1,
+    "batch_size": 256,
+    "weight_decay": 0.0005,
+    "epochs": 200,
+    "save_interval" : 5,
+    "restore": false,
+    "save_path": "results",
+    "spbn": false,              // Split-batchnorm training, not supported
+    "resume": false,
+ 
+ /* Attack Configuration */
+    "attack": "PGD",            // attack type
+    "attack_steps": 7,          // attack steps
+    "attack_eps": 8.0,          // magnitude of epsilon
+    "attack_lr": 2.0,           // attack learning rate
+    "random_init": true,        // flag for random start
+  }
+```
 
 
 ## 🚴 Pre-trained model
 
-We provide the pre-trained ResNet model which had been trained with CIFAR-10 dataset.
-Note that `Madry` model had been trained with PGD-7 adversarial examples following introduced settings.
+We provide the pre-trained `ResNet` model which had been trained with CIFAR-10 dataset.
+Note that `Madry` model had been trained with *PGD-7 adversarial examples* following introduced settings.
 For using a pre-trained model, you can use `download.sh` file. 
-It will automatically download the whole files and organize them to the designated path.
+It will automatically download the whole pre-trained weight files and organize them to the designated path.
 
 ```
 bash download.sh
