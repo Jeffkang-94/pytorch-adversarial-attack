@@ -105,7 +105,7 @@ Or you can directly access the link as below.
 **ResNet** : [link](https://drive.google.com/file/d/1zAiPdXLPYkikxVnjXR8zcgEGer8HR3Ca/view?usp=sharing)  
 **Madry**  : [link](https://drive.google.com/file/d/1iAwkv18spCYaVEOi7IGDDHpgY9EB-MUi/view?usp=sharing)  
 
-**Wide-ResNet** : [link](https://drive.google.com/file/d/1uEQdXDIK4XPnm7ZkzLFtTrXb0WfAgi54/view?usp=sharing)
+**Wide-ResNet** : [link](https://drive.google.com/file/d/1uEQdXDIK4XPnm7ZkzLFtTrXb0WfAgi54/view?usp=sharing)  
 **Wide-Madry**  : [link](https://drive.google.com/file/d/1xdocjfDQ88LzLjYfkIJVSL9ImzrzUXZB/view?usp=sharing)
 
 ## 📔 Experiment
