@@ -6,6 +6,7 @@ import utils
 import os
 from tqdm import tqdm
 from attack import *
+from utils import Normalize_net
 
 class Evaluator:
     def __init__(self, configs, model):
@@ -24,8 +25,9 @@ class Evaluator:
             self.model = models.convert_splitbn_model(self.model, momentum=0.5)
         else:
             self.model.to(self.device)
-        self._load_network(os.path.join(self.save_path, "best.pth"))
-
+        
+        self._load_network(os.path.join(self.save_path, self.configs.phase, "best.pth"))
+        self.model = Normalize_net(self.model)
 
         attack_config = {
             'attack': configs.attack,

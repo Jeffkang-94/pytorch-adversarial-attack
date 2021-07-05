@@ -88,6 +88,32 @@ This is the example of `train.json`.
   }
 ```
 
+This is the example of `eval.json`. 
+```
+{
+    "mode": "eval",             // we are under eval mode  
+    "data_root": "./data",      // You can specify the own dataset root
+    "model_name" : "ResNet",    // name of the model
+    "model_depth": 32,          // model depth
+    "model_width": 1,           // model width
+    "num_class":10,             // number of class, e.g., cifar-10 : 10
+    "phase": "adv",             // [clean/adv] supported
+  
+  /* Evaluation Configuration */
+    "batch_size": 128,
+    "save_path": "results",
+    "restore": false,           // Split-batchnorm training, not supported
+    "spbn": false,
+  
+ /* Attack Configuration */
+    "attack": "PGD",            // attack type
+    "attack_steps": 7,          // attack steps
+    "attack_eps": 8.0,          // magnitude of epsilon
+    "attack_lr": 2.0,           // attack learning rate
+    "random_init": true,        // flag for random start
+  }
+```
+
 
 ## 🚴 Pre-trained model
 
@@ -98,6 +124,7 @@ It will automatically download the whole pre-trained weight files and organize t
 
 ```
 bash download.sh
+python main.py --cfg_path config/eval.json
 ```
 
 Or you can directly access the link as below.

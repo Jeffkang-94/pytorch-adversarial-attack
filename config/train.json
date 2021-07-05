@@ -21,5 +21,5 @@
     "attack_steps": 7,
     "attack_eps": 8.0,
     "attack_lr": 2.0,
-    "random_init": true,
+    "random_init": true
   }

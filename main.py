@@ -7,7 +7,6 @@ import os
 
 from tqdm import tqdm
 from cifar_model import *
-from utils import Normalize_net
 from attack import *
 from config import *
 
@@ -20,7 +19,7 @@ def main():
     configs = get_configs(args)
 
     model = WRN(depth=configs.model_depth, width=configs.model_width, num_classes=configs.num_class)
-    model = Normalize_net(model) # apply the normalization before feeding the inputs into the classifier.
+    #model = Normalize_net(model) # apply the normalization before feeding the inputs into the classifier.
     
     if configs.mode == 'train':
         train = Trainer(configs, model)

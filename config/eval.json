@@ -1,10 +1,11 @@
 {
     "mode": "eval",
     "data_root": "./data",
-    "model_name" : "resnet",
+    "model_name" : "ResNet",
     "model_depth": 32,
     "model_width": 1,
     "num_class":10,
+    "phase": "adv",
   
     "batch_size": 128,
     "save_path": "results",
@@ -15,5 +16,5 @@
     "attack_steps": 7,
     "attack_eps": 8.0,
     "attack_lr": 2.0,
-    "random_init": true,
+    "random_init": true
   }

@@ -19,6 +19,8 @@ class Trainer:
         self.save_path = os.path.join(configs.save_path, configs.model_name)
         self.epoch = 0 
         self.best_acc = 0 
+        assert os.path.exists(self.save_path), "The directory exists, modify `model_name` in train.json"
+
 
         # Creating data loaders
         transform_train = T.Compose([
