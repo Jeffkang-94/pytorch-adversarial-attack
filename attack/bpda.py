@@ -2,9 +2,19 @@ from attack import Attacker
 import torch
 import torch.nn.functional as F
 
-class PGD(Attacker):
+class GradientApproximation(torch.autograd.Function):
+    @staticmethod
+    def forward(ctx, input):
+        return input
+
+    @staticmethod
+    def backward(ctx, grad_output):
+        # BPDA-Identity mapping
+        return grad_output
+
+class BPDA(Attacker):
     def __init__(self, model, config, target=None):
-        super(PGD, self).__init__(model, config)
+        super(BPDA, self).__init__(model, config)
         self.target = target
 
     def forward(self, x, y):
@@ -21,18 +31,17 @@ class PGD(Attacker):
         for _ in range(self.config['attack_steps']):
             x_adv.requires_grad = True
             self.model.zero_grad()
-            logits = self.model(x_adv) #f(T((x))
+            logits = GradientApproximation.apply(self.model(x_adv))
             if self.target is None:
                 # Untargeted attacks - gradient ascent
-                
-                loss = F.cross_entropy(logits, y,  reduction="sum")
+                loss = F.cross_entropy(logits, y, reduction="sum")
                 loss.backward()                      
                 grad = x_adv.grad.detach()
                 grad = grad.sign()
                 x_adv = x_adv + self.config['attack_lr'] * grad
             else:
                 # Targeted attacks - gradient descent
-                assert self.target.size() == y.size()           
+                assert self.target.size() == y.size()
                 loss = F.cross_entropy(logits, self.target)
                 loss.backward()
                 grad = x_adv.grad.detach()
@@ -45,3 +54,4 @@ class PGD(Attacker):
             x_adv = torch.clamp(x_adv, *self.clamp)
 
         return x_adv
+

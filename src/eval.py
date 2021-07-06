@@ -1,8 +1,6 @@
 import torch
-import torch.nn as nn
 import torchvision.transforms as T
 import torchvision
-import utils
 import os
 from tqdm import tqdm
 from attack import *
@@ -30,7 +28,6 @@ class Evaluator:
         self.model = Normalize_net(self.model)
 
         attack_config = {
-            'attack': configs.attack,
             'eps' : configs.attack_eps/255.0,
             'attack_steps': configs.attack_steps,
             'attack_lr': configs.attack_lr / 255.0,
@@ -42,6 +39,8 @@ class Evaluator:
             self.attacker = PGD(self.model, attack_config)
         elif configs.attack =='MIFGSM':
             self.attacker = MIFGSM(self.model, attack_config)
+        elif configs.attack =='BPDA':
+            self.attacker = BPDA(self.model, attack_config)
         else:
             raise ValueError("[FGSM/MI-FGSM/PGD attack types are supported.")
 

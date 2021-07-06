@@ -1,7 +1,7 @@
 # Pytorch implementation of gradient-based adversarial attack
 
 This repository covers pytorch implementation of `FGSM`, `MI-FGSM`, and `PGD` attack.
-Attacks are implemented in `adv_attack.py` file.
+Attacks are implemented under `attack` folder.
 To explore adversarial attack, we deal with [Madry](https://arxiv.org/pdf/1706.06083.pdf) model which had been trained with PGD adversarial examples.
 
 ## Preliminary
@@ -123,6 +123,7 @@ For using a pre-trained model, you can use `download.sh` file.
 It will automatically download the whole pre-trained weight files and organize them to the designated path.
 
 ```
+sudp apt-get install curl
 bash download.sh
 python main.py --cfg_path config/eval.json
 ```
