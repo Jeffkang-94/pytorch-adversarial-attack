@@ -63,7 +63,7 @@ This is the example of `train.json`.
     "mode": "train",            // we are under train mode             
     "data_root": "./data",      // You can specify the own dataset root
     "model_name" : "resnet",    // name of the model
-    "model_depth": 32,          // model depth
+    "model_depth": 34,          // model depth
     "model_width": 1,           // model width
     "num_class":10,             // number of class, e.g., cifar-10 : 10
     "phase": "adv",             // [clean/adv] supported
@@ -80,7 +80,7 @@ This is the example of `train.json`.
     "resume": false,
  
  /* Attack Configuration */
-    "attack": "PGD",            // attack type
+    "attack": "PGD",            // attack type [FGSM, MI-FGSM, PGD] supported
     "attack_steps": 7,          // attack steps
     "attack_eps": 8.0,          // magnitude of epsilon
     "attack_lr": 2.0,           // attack learning rate
@@ -94,7 +94,7 @@ This is the example of `eval.json`.
     "mode": "eval",             // we are under eval mode  
     "data_root": "./data",      // You can specify the own dataset root
     "model_name" : "ResNet",    // name of the model
-    "model_depth": 32,          // model depth
+    "model_depth": 34,          // model depth
     "model_width": 1,           // model width
     "num_class":10,             // number of class, e.g., cifar-10 : 10
     "phase": "adv",             // [clean/adv] supported
@@ -163,3 +163,4 @@ We visualize each sample of adversary.
 ## Reference
 
 - Harry24k [adversarial-attacks-pytorch](https://github.com/Harry24k/adversarial-attacks-pytorch)
+- YyzHarry [ME-Net](https://github.com/YyzHarry/ME-Net)

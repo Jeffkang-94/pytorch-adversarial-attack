@@ -17,7 +17,6 @@ class PGD(Attacker):
         x_adv = x.detach().clone()
         if self.config['random_init'] :
             x_adv = self._random_init(x_adv)
-
         for _ in range(self.config['attack_steps']):
             x_adv.requires_grad = True
             self.model.zero_grad()
